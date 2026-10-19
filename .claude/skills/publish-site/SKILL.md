@@ -1,6 +1,6 @@
 ---
 name: publish-site
-description: Build, deploy and save the portfolio in one go - scan for secrets, build, deploy to Cloudflare with wrangler, check the live site, then commit and push to GitHub. Use when the user says "publish", "deploy", "ship it", "put it live" or runs /publish-site. Takes an optional commit message.
+description: Build, deploy and save the portfolio in one go - scan for secrets, check licenses and disclaimers, build, deploy to Cloudflare with wrangler, check the live site, then commit and push to GitHub. Use when the user says "publish", "deploy", "ship it", "put it live" or runs /publish-site. Takes an optional commit message.
 ---
 
 # Publish the portfolio
@@ -25,24 +25,30 @@ without the PowerShell script policy problem. Stop at the first failing step and
    - Note the repo visibility: `gh repo view arkienz/portfolio --json visibility -q .visibility`.
    Report in one line: "checked: no secrets, keys, databases or personal data (repo PUBLIC)".
 
-3. **Build.** `npm run build`. It runs `astro check`; any error stops the publish.
+3. **License and disclaimer check (never skip).** Follow "License and disclaimer check" in
+   `CLAUDE.md` for everything new in the diff: libraries, copied code, fonts, images, icons,
+   other companies' names, sample data and claims. If anything fails, stop the publish, report it,
+   and do not deploy or commit. Report in one line: "licenses: checked, nothing new" or what passed.
 
-4. **Deploy.** `npx wrangler deploy`. If it says not logged in, stop and tell the user to run
+4. **Build.** `npm run build`. It runs the dependency license guard (`scripts/licenses.mjs`, fails on
+   an unreviewed package), then `astro check`; any error stops the publish.
+
+5. **Deploy.** `npx wrangler deploy`. If it says not logged in, stop and tell the user to run
    `npx.cmd wrangler login` in PowerShell (the sign-in is theirs), then rerun the skill.
    Record the Version ID from the output.
 
-5. **Check the live site** (`https://portfolio.arkienzkun.workers.dev`):
+6. **Check the live site** (`https://portfolio.arkienzkun.workers.dev`):
    - `/` returns 200 and the `<title>`; `/privacy/` 200; `/nope` 404 with the custom page.
    - `curl -sI` shows `strict-transport-security` and `content-security-policy`.
    If any check fails, report it and do not commit.
 
-6. **Commit and push.** `git add -A`, then commit with the user's message if they gave one,
+7. **Commit and push.** `git add -A`, then commit with the user's message if they gave one,
    otherwise one short line written from the diff (what changed, not how). End the message
    with the attribution line from the current system reminder, if one is given. Then
    `git push`. The global pre-push hook runs its own secret scan; never pass `--no-verify`.
    If the hook blocks, report its output and stop.
 
-7. **Report** in a few lines: deployed version, live checks passed, commit hash and message,
+8. **Report** in a few lines: deployed version, live checks passed, commit hash and message,
    pushed. Then the one thing worth checking by hand if the change was visual (e.g. "scroll
    the intro on your phone").
 

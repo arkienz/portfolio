@@ -1,121 +1,181 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import { site, hero, featured, projects, principles, skills } from '../data/site';
-const nav = [['Work', '#work'], ['Projects', '#projects'], ['Approach', '#approach'], ['Contact', '#contact']];
+import PanelGallery from '../components/PanelGallery.astro';
+import { site, intro, apps, showcases, more, principles, contactApps } from '../data/site';
+
+const nav = [['Apps', '#apps'], ['Easy Payroll', '#payroll'], ['DevPOS', '#pos'], ['Approach', '#approach']];
+// Tailwind only sees literal class names, so each app color maps to its classes here.
+const tone = {
+  navy: { bg: 'bg-navy', text: 'text-link', border: 'hover:border-accent', dot: 'bg-accent', btn: 'bg-accent text-accent-ink' },
+  pos: { bg: 'bg-pos', text: 'text-pos', border: 'hover:border-pos', dot: 'bg-pos', btn: 'bg-pos text-accent-ink' },
+  kaha: { bg: 'bg-kaha', text: 'text-kaha', border: 'hover:border-kaha', dot: 'bg-kaha', btn: '' },
+  utang: { bg: 'bg-utang', text: 'text-utang', border: 'hover:border-utang', dot: 'bg-utang', btn: '' },
+} as const;
+const showTone = { payroll: tone.navy, pos: tone.pos } as const;
+
+// Banners drawn onto the 3D tiles.
+const tileImg = async (src: ImageMetadata) => (await getImage({ src, width: 1200, format: 'webp' })).src;
+const [payTile, posTile] = await Promise.all(showcases.map((s) => tileImg(s.banner)));
 ---
 <Base>
-  <header class="sticky top-0 z-40 border-b border-line bg-page/85 backdrop-blur">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6" aria-label="Main">
+  <header class="sticky top-0 z-40 flex h-(--hdr) items-center border-b border-line bg-page/85 backdrop-blur">
+    <nav class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 sm:px-6" aria-label="Main">
       <a href="#" class="font-bold tracking-tight">{site.name}</a>
-      <div class="flex items-center gap-1 sm:gap-4">
-        <ul class="hidden items-center gap-5 text-sm text-muted sm:flex">
+      <div class="flex items-center gap-2 sm:gap-5">
+        <ul class="hidden items-center gap-5 text-sm text-muted md:flex">
           {nav.map(([l, h]) => <li><a class="hover:text-ink" href={h}>{l}</a></li>)}
         </ul>
-        <button id="theme" type="button" class="rounded-lg border border-line px-3 py-1.5 text-sm text-muted hover:text-ink" aria-label="Toggle light or dark mode">Theme</button>
+        <button id="theme" type="button" aria-pressed="false" class="whitespace-nowrap rounded-lg border border-line px-3 py-1.5 text-sm text-muted hover:text-ink">Dark mode</button>
+        <a href="#contact" class="hidden whitespace-nowrap rounded-lg bg-ink px-3 py-1.5 text-sm font-semibold text-page sm:inline-block">Contact</a>
       </div>
     </nav>
   </header>
 
   <main id="main">
-    <!-- Hero -->
-    <section class="mx-auto grid max-w-6xl gap-10 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:pt-24">
-      <div class="reveal">
-        <p class="text-sm font-semibold uppercase tracking-widest text-link">{hero.eyebrow}</p>
-        <h1 class="mt-4 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">{hero.headline}</h1>
-        <p class="mt-5 max-w-xl text-lg text-muted">{hero.sub}</p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#contact" class="whitespace-nowrap rounded-xl bg-accent px-6 py-3 font-bold text-accent-ink shadow-sm hover:brightness-95">Ask for a free walkthrough</a>
-          <a href="#work" class="whitespace-nowrap rounded-xl border border-line px-6 py-3 font-semibold hover:bg-card">See the work</a>
+    <!-- 3D intro: a flat page of app screens tilts into a floor and breaks apart on scroll (src/scripts/floor.js) -->
+    <section id="floor" class="relative">
+      <div id="floor-stage" class="sticky top-(--hdr) h-[calc(100svh-var(--hdr))] overflow-hidden">
+        <canvas id="floor-canvas" data-payroll={payTile} data-pos={posTile} class="absolute inset-0 block h-full w-full" aria-hidden="true"></canvas>
+        <div class="pointer-events-none relative mx-auto max-w-6xl px-4 pt-6 sm:px-6 sm:pt-10">
+          {intro.steps.map((s, i) => {
+            const last = i === intro.steps.length - 1;
+            return (
+              <div class:list={['headline', i > 0 && 'absolute inset-x-4 top-6 sm:inset-x-6 sm:top-10']} aria-hidden={i > 0 && !last ? 'true' : undefined}>
+                {i === 0 && <p class="text-sm font-semibold text-link">{intro.eyebrow}</p>}
+                {i === 0
+                  ? <h1 class="mt-3 max-w-3xl text-3xl font-extrabold leading-[1.06] tracking-tight sm:text-5xl">{s}</h1>
+                  : <p class="max-w-3xl text-3xl font-extrabold leading-[1.06] tracking-tight sm:text-5xl">{s}</p>}
+                {last && (
+                  <div class="pointer-events-auto mt-6 flex flex-wrap gap-3">
+                    <a href="#contact" class="whitespace-nowrap rounded-xl bg-accent px-6 py-3 font-bold text-accent-ink hover:brightness-95">Ask for a free demo</a>
+                    <a href="#apps" class="whitespace-nowrap rounded-xl border border-line bg-page px-6 py-3 font-semibold hover:bg-card">See the apps</a>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
-      <div class="reveal overflow-hidden rounded-2xl border border-line bg-card shadow-xl">
-        <Image src={featured.banner} alt="Easy Payroll banner" widths={[640, 960, 1280]} sizes="(min-width:1024px) 540px, 100vw" loading="eager" class="h-auto w-full" />
-      </div>
+      <div class="floor-steps" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
     </section>
 
-    <!-- Featured -->
-    <section id="work" class="border-y border-line bg-card py-16 sm:py-24">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <div class="reveal max-w-3xl">
-          <p class="text-sm font-semibold uppercase tracking-widest text-link">Featured work</p>
-          <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">{featured.name} <span class="text-muted font-semibold">({featured.code})</span></h2>
-          <p class="mt-2 text-sm text-muted">{featured.status}</p>
-          <p class="mt-5 text-lg text-muted">{featured.blurb}</p>
-        </div>
-        <ul class="reveal mt-8 grid gap-3 sm:grid-cols-2">
-          {featured.points.map((p) => (
-            <li class="rounded-xl border border-line bg-page p-4 text-sm leading-relaxed">{p}</li>
-          ))}
-        </ul>
-        <ul class="mt-6 flex flex-wrap gap-2">
-          {featured.stack.map((s) => <li class="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted">{s}</li>)}
-        </ul>
-        <div class="mt-10 flex snap-x gap-4 overflow-x-auto pb-4" tabindex="0" aria-label="Easy Payroll screens, scroll sideways">
-          {featured.shots.map((s) => (
-            <Image src={s.src} alt={s.alt} widths={[360, 540]} sizes="270px" loading="lazy" class="reveal h-auto w-[270px] shrink-0 snap-start rounded-xl border border-line" />
-          ))}
-        </div>
-        <p class="mt-2 text-xs text-muted">Screens show sample data (Acme Foods Inc.). Not affiliated with SSS, PhilHealth, Pag-IBIG, BIR or DOLE.</p>
-      </div>
-    </section>
-
-    <!-- Other projects -->
-    <section id="projects" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-      <div class="reveal max-w-2xl">
-        <p class="text-sm font-semibold uppercase tracking-widest text-link">More projects</p>
-        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Tools for the shop, the store and the lender</h2>
-      </div>
-      <div class="mt-10 grid gap-5 md:grid-cols-3">
-        {projects.map((p) => (
-          <article class="reveal flex flex-col rounded-2xl border border-line bg-card p-6">
-            <p class="text-xs font-semibold uppercase tracking-widest text-muted">{p.tag}</p>
-            <h3 class="mt-2 text-xl font-bold">{p.name}</h3>
-            <p class="mt-3 flex-1 text-sm leading-relaxed text-muted">{p.text}</p>
-            <ul class="mt-5 flex flex-wrap gap-2">
-              {p.stack.map((s) => <li class="rounded-full border border-line px-2.5 py-0.5 text-xs text-muted">{s}</li>)}
-            </ul>
-            <p class="mt-4 text-xs font-medium text-link">{p.status}</p>
-          </article>
+    <!-- The four apps at a glance -->
+    <section id="apps" class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+      <h2 class="sr-only">The apps</h2>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {apps.map((a) => (
+          <a href={a.href} class:list={['reveal rounded-2xl border border-line bg-card p-5', tone[a.color as keyof typeof tone].border]}>
+            <span class:list={['inline-grid size-10 place-items-center rounded-xl font-extrabold', tone[a.color as keyof typeof tone].bg, a.markText]} aria-hidden="true">{a.mark}</span>
+            <h3 class="mt-4 font-bold">{a.name}</h3>
+            <p class="mt-1 text-sm text-muted">{a.text}</p>
+            <p class="mt-4 text-xs font-medium text-link">{a.status}</p>
+          </a>
         ))}
       </div>
     </section>
 
-    <!-- Approach -->
-    <section id="approach" class="border-y border-line bg-card py-16 sm:py-24">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6">
-        <h2 class="reveal max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl">How I build</h2>
-        <dl class="mt-10 grid gap-8 sm:grid-cols-2">
-          {principles.map((p) => (
+    <!-- Featured apps with screen galleries; image side alternates -->
+    {showcases.map((s, si) => {
+      const t = showTone[s.id as keyof typeof showTone];
+      const flip = si % 2 === 1;
+      return (
+        <section id={s.id} class:list={['py-16 sm:py-24', !flip && 'border-y border-line bg-card']}>
+          <div class:list={['mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:items-center', flip ? 'lg:grid-cols-[1.15fr_1fr]' : 'lg:grid-cols-[1fr_1.15fr]']}>
             <div class="reveal">
-              <dt class="text-lg font-bold">{p.t}</dt>
-              <dd class="mt-1 text-muted">{p.d}</dd>
+              <p class:list={['text-sm font-semibold', t.text]}>{s.tag}</p>
+              <h2 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">{s.name}</h2>
+              <p class="mt-4 text-muted">{s.blurb}</p>
+              <ul class="mt-6 space-y-3 text-sm">
+                {s.points.map((p) => <li class="flex gap-3"><span class:list={['mt-1.5 size-2 shrink-0 rounded-full', t.dot]}></span>{p}</li>)}
+              </ul>
+              <a href="#contact" data-pick={s.id} class:list={['mt-8 inline-block whitespace-nowrap rounded-xl px-5 py-2.5 font-bold hover:brightness-95', t.btn]}>{s.cta}</a>
             </div>
+            <div class:list={['reveal overflow-hidden rounded-2xl border border-line shadow-xl', flip && 'lg:order-first']}>
+              <Image src={s.banner} alt={`${s.name} banner`} widths={[640, 960, 1280]} sizes="(min-width:1024px) 600px, 100vw" class="h-auto w-full" />
+            </div>
+          </div>
+          <div class="mx-auto mt-10 max-w-6xl px-4 sm:px-6">
+            <PanelGallery label={`${s.name} screens`} shots={s.shots} />
+            <p class="mt-3 text-xs text-muted">{s.note}</p>
+          </div>
+        </section>
+      );
+    })}
+
+    <!-- The two apps without screenshots yet -->
+    <section id="more" class="border-y border-line bg-card py-16 sm:py-24">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <h2 class="reveal text-3xl font-extrabold tracking-tight sm:text-4xl">For the store and the lender</h2>
+        <div class="mt-10 grid gap-5 md:grid-cols-2">
+          {more.map((m) => (
+            <article class="reveal rounded-2xl border border-line bg-page p-6 sm:p-8">
+              <p class:list={['text-sm font-semibold', tone[m.color as keyof typeof tone].text]}>{m.tag}</p>
+              <h3 class="mt-2 text-2xl font-bold">{m.name}</h3>
+              <p class="mt-3 text-muted">{m.text}</p>
+              <dl class="mt-6 grid grid-cols-2 gap-4 text-sm">
+                {m.facts.map(([k, v]) => <div><dt class="text-muted">{k}</dt><dd class="font-semibold">{v}</dd></div>)}
+              </dl>
+              <p class="mt-6 text-xs text-muted">{m.note}</p>
+            </article>
           ))}
-        </dl>
-        <ul class="mt-12 flex flex-wrap gap-2" aria-label="Skills">
-          {skills.map((s) => <li class="rounded-full border border-line bg-page px-3 py-1 text-sm">{s}</li>)}
-        </ul>
+        </div>
       </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+    <section id="approach" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <h2 class="reveal text-3xl font-extrabold tracking-tight sm:text-4xl">How I build</h2>
+      <dl class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {principles.map((p) => <div class="reveal"><dt class="font-bold">{p.t}</dt><dd class="mt-1 text-sm text-muted">{p.d}</dd></div>)}
+      </dl>
+    </section>
+
+    <section id="contact" class="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
       <div class="reveal rounded-3xl bg-navy p-8 text-white sm:p-14">
-        <h2 class="max-w-2xl text-3xl font-extrabold tracking-tight sm:text-5xl">See it run on <span class="text-accent">your own cutoff.</span></h2>
-        <p class="mt-4 max-w-xl text-white/75">Bring one real cutoff and we run it together. An evaluation version is available so you can test it on your own data.</p>
+        <h2 class="max-w-2xl text-3xl font-extrabold tracking-tight sm:text-5xl">See it run on <span class="text-accent">your own data.</span></h2>
+        <p class="mt-4 max-w-xl text-white/75">Pick the app and I'll set up a free walkthrough on your real cutoff or menu.</p>
+        <div class="mt-8 inline-flex rounded-xl bg-white/10 p-1" role="group" aria-label="Which app">
+          {contactApps.map(([id, label], i) => (
+            <button type="button" data-app={id} aria-pressed={i === 0 ? 'true' : 'false'} class:list={['app-pick whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold', i === 0 ? 'bg-accent text-accent-ink' : 'text-white/80 hover:text-white']}>{label}</button>
+          ))}
+        </div>
         <dl class="mt-8 grid gap-4 text-lg sm:grid-cols-3">
           <div><dt class="text-xs uppercase tracking-widest text-white/60">Email</dt><dd><a class="underline-offset-4 hover:underline" href={`mailto:${site.email}`}>{site.email}</a></dd></div>
           <div><dt class="text-xs uppercase tracking-widest text-white/60">Phone</dt><dd><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></dd></div>
           <div><dt class="text-xs uppercase tracking-widest text-white/60">GitHub</dt><dd><a class="underline-offset-4 hover:underline" href={site.github} rel="noopener">github.com/arkienz</a></dd></div>
         </dl>
-        <a href={`mailto:${site.email}?subject=Free%20walkthrough`} class="mt-8 inline-block whitespace-nowrap rounded-xl bg-accent px-6 py-3 font-bold text-accent-ink hover:brightness-95">Ask for a free walkthrough</a>
+        <a id="cta" data-email={site.email} href={`mailto:${site.email}?subject=${encodeURIComponent('Free walkthrough: Easy Payroll')}`} class="mt-8 inline-block whitespace-nowrap rounded-xl bg-accent px-6 py-3 font-bold text-accent-ink hover:brightness-95">Email me about Easy Payroll</a>
       </div>
     </section>
   </main>
 
   <footer class="border-t border-line py-8 text-center text-xs text-muted">
-    <p>&copy; {new Date().getFullYear()} {site.name}. Easy Payroll, Kaha and DevPOS are my own products, not affiliated with GCash, SSS, PhilHealth, Pag-IBIG, BIR or DOLE.</p>
-    <p class="mt-2"><a href="/privacy" class="underline-offset-4 hover:text-ink hover:underline">Privacy notice</a></p>
+    <p>&copy; {new Date().getFullYear()} {site.name}. Easy Payroll, DevPOS, Kaha and DevPAUTANG are my own products, not affiliated with GCash, SSS, PhilHealth, Pag-IBIG, BIR or DOLE.</p>
+    <p class="mt-2">
+      <a href="/privacy/" class="underline-offset-4 hover:text-ink hover:underline">Privacy notice</a>
+      <span aria-hidden="true"> · </span>
+      Font: Plus Jakarta Sans, <a href="/fonts/OFL.txt" class="underline-offset-4 hover:text-ink hover:underline">SIL Open Font License</a>
+    </p>
   </footer>
 </Base>
+
+<script>
+  // Separate chunk so the rest of the page's script stays small.
+  import('../scripts/floor.js');
+
+  // Contact picker: the email button and its subject follow the chosen app.
+  const labels: Record<string, string> = { payroll: 'Easy Payroll', pos: 'DevPOS', other: 'your apps' };
+  const cta = document.getElementById('cta') as HTMLAnchorElement;
+  const pick = (app: string) => {
+    document.querySelectorAll<HTMLButtonElement>('.app-pick').forEach((b) => {
+      const on = b.dataset.app === app;
+      b.setAttribute('aria-pressed', String(on));
+      b.classList.toggle('bg-accent', on); b.classList.toggle('text-accent-ink', on);
+      b.classList.toggle('text-white/80', !on); b.classList.toggle('hover:text-white', !on);
+    });
+    cta.textContent = `Email me about ${labels[app]}`;
+    cta.href = `mailto:${cta.dataset.email}?subject=${encodeURIComponent(`Free walkthrough: ${labels[app]}`)}`;
+  };
+  document.querySelectorAll<HTMLButtonElement>('.app-pick').forEach((b) => b.addEventListener('click', () => pick(b.dataset.app!)));
+  document.querySelectorAll<HTMLElement>('[data-pick]').forEach((a) => a.addEventListener('click', () => pick(a.dataset.pick!)));
+</script>

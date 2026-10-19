@@ -1,8 +1,11 @@
 ---
 import '../styles/global.css';
-import { site } from '../data/site';
+import { getImage } from 'astro:assets';
+import { site, showcases } from '../data/site';
 const { title = site.title, description = site.description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// JPEG because some social crawlers still skip WebP previews.
+const ogImage = new URL((await getImage({ src: showcases[0].banner, width: 1200, format: 'jpg' })).src, Astro.site);
 ---
 <!doctype html>
 <html lang="en">
@@ -17,6 +20,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Easy Payroll banner" />
+    <meta name="twitter:card" content="summary_large_image" />
     <script is:inline>
       // Set theme before paint to avoid a flash; try/catch because storage can be blocked.
       try {
@@ -36,10 +43,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       );
       document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
-      document.getElementById('theme')?.addEventListener('click', () => {
+      // The button names the mode it switches to, so its visible text is its accessible name.
+      const themeBtn = document.getElementById('theme');
+      const showTheme = () => {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        if (themeBtn) { themeBtn.textContent = dark ? 'Light mode' : 'Dark mode'; themeBtn.setAttribute('aria-pressed', String(dark)); }
+      };
+      showTheme();
+      themeBtn?.addEventListener('click', () => {
         const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
         document.documentElement.dataset.theme = next;
         try { localStorage.setItem('theme', next); } catch {}
+        showTheme();
       });
     </script>
   </body>

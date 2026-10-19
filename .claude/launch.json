@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio-preview",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4330", "--bind", "127.0.0.1", "-d", "D:\Portfolio\dist"],
+      "port": 4330, "autoPort": false
+    },
+    {
+      "name": "portfolio-mockup",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8090", "--bind", "127.0.0.1", "-d", "D:\Portfolio"],
+      "port": 8090
+    }
+  ]
+}

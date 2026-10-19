@@ -108,9 +108,13 @@ export const principles = [
   { t: 'Private by design', d: 'Company data is kept apart on the server; device data is encrypted.' },
 ];
 
-// The contact card's app picker; the email subject follows the choice.
-export const contactApps = [
-  ['payroll', 'Easy Payroll'],
-  ['pos', 'DevPOS'],
-  ['other', 'Other'],
-] as const;
+// The contact wallet: one walkthrough pass per app, each an email with the subject filled in.
+export const passes = [
+  { name: 'Easy Payroll', for: 'For companies', bring: 'Bring one real cutoff.', mark: '₱' },
+  { name: 'DevPOS', for: 'For cafes', bring: 'Bring your menu.', mark: 'P' },
+  { name: 'Kaha', for: 'For sari-sari stores', bring: 'Bring a day of GCash entries.', mark: 'K' },
+  { name: 'DevPAUTANG', for: 'For lenders', bring: 'Bring your listahan.', mark: 'U' },
+];
+
+export const walkthroughMail = (app: string) =>
+  `mailto:${site.email}?subject=${encodeURIComponent(`Free walkthrough: ${app}`)}`;

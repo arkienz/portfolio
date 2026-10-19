@@ -6,7 +6,8 @@ import Payslip from '../components/papers/Payslip.astro';
 import Receipt from '../components/papers/Receipt.astro';
 import Ledger from '../components/papers/Ledger.astro';
 import Notebook from '../components/papers/Notebook.astro';
-import { site, intro, showcases, store, about, principles, contactApps } from '../data/site';
+import ContactWallet from '../components/ContactWallet.astro';
+import { site, intro, showcases, store, about, principles, walkthroughMail } from '../data/site';
 
 const nav = [['Easy Payroll', '#payroll'], ['DevPOS', '#pos'], ['Kaha', '#store'], ['DevPAUTANG', '#store']];
 // Each chapter is printed on the paper its app replaces. Tailwind only sees literal class names,
@@ -86,7 +87,7 @@ const [payTile, posTile] = await Promise.all(showcases.map((s) => tileImg(s.bann
               <ul class="mt-8 max-w-xl space-y-3">
                 {s.points.map((p) => <li class:list={['border-l-4 pl-4', c.bar]}>{p}</li>)}
               </ul>
-              <a href="#contact" data-pick={s.id} class:list={['mt-8 inline-block whitespace-nowrap rounded-xl px-5 py-2.5 font-bold hover:brightness-95', c.btn]}>{s.cta}</a>
+              <a href={walkthroughMail(s.name)} class:list={['mt-8 inline-block whitespace-nowrap rounded-xl px-5 py-2.5 font-bold hover:brightness-95', c.btn]}>{s.cta}</a>
             </div>
             <c.paper />
           </div>
@@ -127,20 +128,17 @@ const [payTile, posTile] = await Promise.all(showcases.map((s) => tileImg(s.bann
     </section>
 
     <section id="contact" class="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
-      <div class="rounded-3xl bg-navy p-8 text-white sm:p-14">
-        <h2 class="max-w-2xl text-3xl font-extrabold tracking-tight sm:text-5xl">See it run on your own data.</h2>
-        <p class="mt-4 max-w-xl text-white/75">Pick the app and I'll set up a free walkthrough on your real cutoff, menu or ledger.</p>
-        <div class="mt-8 inline-flex rounded-xl bg-white/10 p-1" role="group" aria-label="Which app">
-          {contactApps.map(([id, label], i) => (
-            <button type="button" data-app={id} aria-pressed={i === 0 ? 'true' : 'false'} class:list={['app-pick whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold', i === 0 ? 'bg-accent text-accent-ink' : 'text-white/80 hover:text-white']}>{label}</button>
-          ))}
+      <div class="grid gap-10 rounded-3xl bg-navy p-6 text-white sm:p-14 lg:grid-cols-[1fr_1.15fr] lg:items-end">
+        <div>
+          <h2 class="max-w-xl text-3xl font-extrabold tracking-tight sm:text-5xl">See it run on <span class="mark" data-mark-target>your own data.</span></h2>
+          <p class="mt-4 max-w-md text-white/75">Pick a pass and I'll set up a free walkthrough on your real cutoff, menu or ledger.</p>
+          <dl class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <div><dt class="text-sm text-white/65">Email</dt><dd class="text-lg"><a class="underline-offset-4 hover:underline" href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+            <div><dt class="text-sm text-white/65">Phone</dt><dd class="text-lg"><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></dd></div>
+            <div><dt class="text-sm text-white/65">GitHub</dt><dd class="text-lg"><a class="underline-offset-4 hover:underline" href={site.github} rel="noopener">github.com/arkienz</a></dd></div>
+          </dl>
         </div>
-        <dl class="mt-8 grid gap-4 text-lg sm:grid-cols-3">
-          <div><dt class="text-sm text-white/65">Email</dt><dd><a class="underline-offset-4 hover:underline" href={`mailto:${site.email}`}>{site.email}</a></dd></div>
-          <div><dt class="text-sm text-white/65">Phone</dt><dd><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></dd></div>
-          <div><dt class="text-sm text-white/65">GitHub</dt><dd><a class="underline-offset-4 hover:underline" href={site.github} rel="noopener">github.com/arkienz</a></dd></div>
-        </dl>
-        <a id="cta" data-email={site.email} href={`mailto:${site.email}?subject=${encodeURIComponent('Free walkthrough: Easy Payroll')}`} class="mt-8 inline-block whitespace-nowrap rounded-xl bg-accent px-6 py-3 font-bold text-accent-ink hover:brightness-95">Email me about Easy Payroll</a>
+        <ContactWallet />
       </div>
     </section>
   </main>
@@ -158,19 +156,10 @@ const [payTile, posTile] = await Promise.all(showcases.map((s) => tileImg(s.bann
   // Separate chunk so the rest of the page's script stays small.
   import('../scripts/floor.js');
 
-  // Contact picker: the email button and its subject follow the chosen app.
-  const labels: Record<string, string> = { payroll: 'Easy Payroll', pos: 'DevPOS', other: 'your apps' };
-  const cta = document.getElementById('cta') as HTMLAnchorElement;
-  const pick = (app: string) => {
-    document.querySelectorAll<HTMLButtonElement>('.app-pick').forEach((b) => {
-      const on = b.dataset.app === app;
-      b.setAttribute('aria-pressed', String(on));
-      b.classList.toggle('bg-accent', on); b.classList.toggle('text-accent-ink', on);
-      b.classList.toggle('text-white/80', !on); b.classList.toggle('hover:text-white', !on);
-    });
-    cta.textContent = `Email me about ${labels[app]}`;
-    cta.href = `mailto:${cta.dataset.email}?subject=${encodeURIComponent(`Free walkthrough: ${labels[app]}`)}`;
-  };
-  document.querySelectorAll<HTMLButtonElement>('.app-pick').forEach((b) => b.addEventListener('click', () => pick(b.dataset.app!)));
-  document.querySelectorAll<HTMLElement>('[data-pick]').forEach((a) => a.addEventListener('click', () => pick(a.dataset.pick!)));
+  // Marker highlight: start undrawn, sweep in once the heading is on screen.
+  const marks = document.querySelectorAll<HTMLElement>('[data-mark-target]');
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) { (e.target as HTMLElement).dataset.mark = 'on'; io.unobserve(e.target); }
+  }), { threshold: 0.6 });
+  marks.forEach((m) => { m.dataset.mark = 'off'; io.observe(m); });
 </script>

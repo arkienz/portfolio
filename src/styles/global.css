@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('/fonts/PlusJakartaSans-Variable.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --color-page: #f7f8fb;
+  --color-ink: #0b1b3d;
+  --color-muted: #51607d;
+  --color-card: #ffffff;
+  --color-line: #dfe4ee;
+  --color-navy: #0b1f4a;
+  --color-accent: #ffc447;
+  --color-accent-ink: #1a1405;
+  --color-link: #1d4ed8;
+}
+
+/* Dark mode: off-white text, lighter surfaces for depth, no pure black. */
+:root[data-theme='dark'] {
+  --color-page: #0a1124;
+  --color-ink: #e7ecf7;
+  --color-muted: #9aa8c4;
+  --color-card: #111b35;
+  --color-line: #22304f;
+  --color-link: #8fb2ff;
+}
+
+html { scroll-behavior: smooth; background: var(--color-page); color: var(--color-ink); }
+body { font-family: var(--font-sans); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Scroll reveal: content stays visible without JS (class is added by script). */
+.js .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+.js .reveal.in { opacity: 1; transform: none; }
+
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; border-radius: 4px; }

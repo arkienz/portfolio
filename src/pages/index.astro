@@ -1,0 +1,120 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { site, hero, featured, projects, principles, skills } from '../data/site';
+const nav = [['Work', '#work'], ['Projects', '#projects'], ['Approach', '#approach'], ['Contact', '#contact']];
+---
+<Base>
+  <header class="sticky top-0 z-40 border-b border-line bg-page/85 backdrop-blur">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6" aria-label="Main">
+      <a href="#" class="font-bold tracking-tight">{site.name}</a>
+      <div class="flex items-center gap-1 sm:gap-4">
+        <ul class="hidden items-center gap-5 text-sm text-muted sm:flex">
+          {nav.map(([l, h]) => <li><a class="hover:text-ink" href={h}>{l}</a></li>)}
+        </ul>
+        <button id="theme" type="button" class="rounded-lg border border-line px-3 py-1.5 text-sm text-muted hover:text-ink" aria-label="Toggle light or dark mode">Theme</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="mx-auto grid max-w-6xl gap-10 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:pt-24">
+      <div class="reveal">
+        <p class="text-sm font-semibold uppercase tracking-widest text-link">{hero.eyebrow}</p>
+        <h1 class="mt-4 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">{hero.headline}</h1>
+        <p class="mt-5 max-w-xl text-lg text-muted">{hero.sub}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#contact" class="whitespace-nowrap rounded-xl bg-accent px-6 py-3 font-bold text-accent-ink shadow-sm hover:brightness-95">Ask for a free walkthrough</a>
+          <a href="#work" class="whitespace-nowrap rounded-xl border border-line px-6 py-3 font-semibold hover:bg-card">See the work</a>
+        </div>
+      </div>
+      <div class="reveal overflow-hidden rounded-2xl border border-line bg-card shadow-xl">
+        <Image src={featured.banner} alt="Easy Payroll banner" widths={[640, 960, 1280]} sizes="(min-width:1024px) 540px, 100vw" loading="eager" class="h-auto w-full" />
+      </div>
+    </section>
+
+    <!-- Featured -->
+    <section id="work" class="border-y border-line bg-card py-16 sm:py-24">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="reveal max-w-3xl">
+          <p class="text-sm font-semibold uppercase tracking-widest text-link">Featured work</p>
+          <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">{featured.name} <span class="text-muted font-semibold">({featured.code})</span></h2>
+          <p class="mt-2 text-sm text-muted">{featured.status}</p>
+          <p class="mt-5 text-lg text-muted">{featured.blurb}</p>
+        </div>
+        <ul class="reveal mt-8 grid gap-3 sm:grid-cols-2">
+          {featured.points.map((p) => (
+            <li class="rounded-xl border border-line bg-page p-4 text-sm leading-relaxed">{p}</li>
+          ))}
+        </ul>
+        <ul class="mt-6 flex flex-wrap gap-2">
+          {featured.stack.map((s) => <li class="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted">{s}</li>)}
+        </ul>
+        <div class="mt-10 flex snap-x gap-4 overflow-x-auto pb-4" tabindex="0" aria-label="Easy Payroll screens, scroll sideways">
+          {featured.shots.map((s) => (
+            <Image src={s.src} alt={s.alt} widths={[360, 540]} sizes="270px" loading="lazy" class="reveal h-auto w-[270px] shrink-0 snap-start rounded-xl border border-line" />
+          ))}
+        </div>
+        <p class="mt-2 text-xs text-muted">Screens show sample data (Acme Foods Inc.). Not affiliated with SSS, PhilHealth, Pag-IBIG, BIR or DOLE.</p>
+      </div>
+    </section>
+
+    <!-- Other projects -->
+    <section id="projects" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <div class="reveal max-w-2xl">
+        <p class="text-sm font-semibold uppercase tracking-widest text-link">More projects</p>
+        <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Tools for the shop, the store and the lender</h2>
+      </div>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        {projects.map((p) => (
+          <article class="reveal flex flex-col rounded-2xl border border-line bg-card p-6">
+            <p class="text-xs font-semibold uppercase tracking-widest text-muted">{p.tag}</p>
+            <h3 class="mt-2 text-xl font-bold">{p.name}</h3>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-muted">{p.text}</p>
+            <ul class="mt-5 flex flex-wrap gap-2">
+              {p.stack.map((s) => <li class="rounded-full border border-line px-2.5 py-0.5 text-xs text-muted">{s}</li>)}
+            </ul>
+            <p class="mt-4 text-xs font-medium text-link">{p.status}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Approach -->
+    <section id="approach" class="border-y border-line bg-card py-16 sm:py-24">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <h2 class="reveal max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl">How I build</h2>
+        <dl class="mt-10 grid gap-8 sm:grid-cols-2">
+          {principles.map((p) => (
+            <div class="reveal">
+              <dt class="text-lg font-bold">{p.t}</dt>
+              <dd class="mt-1 text-muted">{p.d}</dd>
+            </div>
+          ))}
+        </dl>
+        <ul class="mt-12 flex flex-wrap gap-2" aria-label="Skills">
+          {skills.map((s) => <li class="rounded-full border border-line bg-page px-3 py-1 text-sm">{s}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <div class="reveal rounded-3xl bg-navy p-8 text-white sm:p-14">
+        <h2 class="max-w-2xl text-3xl font-extrabold tracking-tight sm:text-5xl">See it run on <span class="text-accent">your own cutoff.</span></h2>
+        <p class="mt-4 max-w-xl text-white/75">Bring one real cutoff and we run it together. An evaluation version is available so you can test it on your own data.</p>
+        <dl class="mt-8 grid gap-4 text-lg sm:grid-cols-3">
+          <div><dt class="text-xs uppercase tracking-widest text-white/60">Email</dt><dd><a class="underline-offset-4 hover:underline" href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+          <div><dt class="text-xs uppercase tracking-widest text-white/60">Phone</dt><dd><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></dd></div>
+          <div><dt class="text-xs uppercase tracking-widest text-white/60">GitHub</dt><dd><a class="underline-offset-4 hover:underline" href={site.github} rel="noopener">github.com/arkienz</a></dd></div>
+        </dl>
+        <a href={`mailto:${site.email}?subject=Free%20walkthrough`} class="mt-8 inline-block whitespace-nowrap rounded-xl bg-accent px-6 py-3 font-bold text-accent-ink hover:brightness-95">Ask for a free walkthrough</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line py-8 text-center text-xs text-muted">
+    <p>&copy; {new Date().getFullYear()} {site.name}. Easy Payroll, Kaha and DevPOS are my own products, not affiliated with GCash, SSS, PhilHealth, Pag-IBIG, BIR or DOLE.</p>
+  </footer>
+</Base>

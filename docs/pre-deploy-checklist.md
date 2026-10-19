@@ -1,4 +1,18 @@
-# Pre-deploy checklist
+# Pre-deploy checklist
+
+## 2026-10-20, licenses and disclaimers check
+
+| Check | Result | Evidence |
+|---|---|---|
+| Code shipped to visitors | fixed | Three.js 0.170.0, Tailwind 4.3.3, Vite 8.3.4 preload helper, all MIT. The build stripped Three.js's notice from the script, so `scripts/licenses.mjs` now writes `/licenses.txt` from each package's own LICENSE on every build; linked in the footer |
+| Build-only tools | pass | astro, @astrojs/*, typescript (Apache-2.0), wrangler run at build/deploy time and never reach visitors |
+| Font | pass | Plus Jakarta Sans, SIL OFL 1.1; `/fonts/OFL.txt` copyright line matches the official repo exactly; no Reserved Font Name |
+| Images | pass | Owner's own marketing posts (DevPAYROLL, DevPOS) with sample data; no third-party logos; payroll posts carry their own not-affiliated line |
+| Third-party names | fixed | GCash, G-Xchange, QR Ph, BSP, SSS, PhilHealth, Pag-IBIG, BIR, DOLE named only descriptively; footer now says not affiliated with or endorsed by each, QR Ph and BSP added |
+| Receipts and payslips | pass | Receipt paper says 'Not an official receipt'; payslip says sample data, not affiliated |
+| Runtime third parties | pass | No CDN, analytics, embeds or cookies on the live site (dist has no external script URLs) |
+
+Open: owner to run an IPOPHL trademark search on the app names before paid promotion.
 
 ## 2026-10-19, v0.1.0 (commit 78092c9 + uncommitted privacy/headers changes, live version 283ccf0e)
 

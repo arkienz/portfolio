@@ -69,6 +69,7 @@ Live: https://portfolio.arkienzkun.workers.dev
 - `src/styles/global.css`: Tailwind import, color tokens for light and dark, the font, intro layout.
 - `src/assets/payroll/`, `src/assets/pos/`: marketing images copied from
   `D:\Repos\DevPAYROLL\docs\marketing\en` and `D:\Repos\DevPOS\docs\marketing\raket`.
+- `scripts/licenses.mjs`: writes `public/licenses.txt` (open-source notices for the code that ships: Three.js, Tailwind, Vite's preload helper) from the installed packages on every build.
 - `src/components/`: `PanelGallery.astro` and `papers/` (payslip, receipt, ledger, notebook).
 - `mockup/` (not in git): the approved clickable mockups (`v2.html` is the current design).
 - `public/`: files served as-is: `_headers`, `robots.txt`, `favicon.svg`, `fonts/` (font + `OFL.txt`).

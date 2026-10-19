@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   // Replace with the real domain before deploy (sitemap and canonical URLs use it).
-  site: 'https://example.com',
+  site: 'https://portfolio.arkienzkun.workers.dev',
   integrations: [sitemap()],
   vite: { plugins: [tailwindcss()] },
 });

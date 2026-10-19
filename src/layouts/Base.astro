@@ -30,19 +30,12 @@ const ogImage = new URL((await getImage({ src: showcases[0].banner, width: 1200,
         var t = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.dataset.theme = t;
       } catch (e) {}
-      document.documentElement.classList.add('js');
     </script>
   </head>
   <body class="antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded focus:bg-accent focus:px-3 focus:py-2 focus:text-accent-ink">Skip to content</a>
     <slot />
     <script>
-      const io = new IntersectionObserver(
-        (es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add('in'), io.unobserve(e.target))),
-        { threshold: 0.12 },
-      );
-      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
-
       // The button names the mode it switches to, so its visible text is its accessible name.
       const themeBtn = document.getElementById('theme');
       const showTheme = () => {

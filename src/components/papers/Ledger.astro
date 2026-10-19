@@ -1,0 +1,37 @@
+---
+import { peso, sum } from './money';
+
+// A sample day in the Kaha ledger, in centavos. Numbers are masked as the app shows them.
+const rows = [
+  { time: '9:12 AM', type: 'Cash-in', number: '0917 *** 4821', amount: 150000, fee: 1500 },
+  { time: '11:40 AM', type: 'Cash-out', number: '0928 *** 1093', amount: 200000, fee: 2000 },
+  { time: '2:48 PM', type: 'Cash-in', number: '0956 *** 7710', amount: 50000, fee: 1000 },
+];
+const fees = sum(rows.map((r) => r.fee));
+---
+<figure class="paper tilt-l rounded-md p-5 sm:p-6" aria-label="Sample Kaha ledger page">
+  <div class="flex items-baseline justify-between"><p class="font-extrabold">Today, Oct 20</p><p class="text-xs text-paper-muted">GCash ledger</p></div>
+  <table class="num mt-4 w-full whitespace-nowrap text-sm">
+    <thead>
+      <tr class="border-b-2 border-paper-kaha text-left text-xs text-paper-muted">
+        <th class="pb-1.5 font-semibold">Time</th>
+        <th class="pb-1.5 font-semibold">Type</th>
+        <th class="hidden pb-1.5 font-semibold sm:table-cell">Number</th>
+        <th class="pb-1.5 pl-3 text-right font-semibold">Amount</th>
+        <th class="pb-1.5 pl-3 text-right font-semibold">Fee</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr class="border-b border-paper-rule">
+          <td class="py-2">{r.time}</td><td>{r.type}</td><td class="hidden sm:table-cell">{r.number}</td>
+          <td class="pl-3 text-right">{peso(r.amount)}</td><td class="pl-3 text-right">{peso(r.fee)}</td>
+        </tr>
+      ))}
+    </tbody>
+    <tfoot>
+      <tr><td colspan="4" class="pt-3 font-bold">Fees earned today</td><td class="pt-3 text-right text-lg font-extrabold text-paper-kaha">₱{peso(fees)}</td></tr>
+    </tfoot>
+  </table>
+  <figcaption class="mt-3 text-xs text-paper-muted">Sample data. Not affiliated with GCash, G-Xchange, Inc. or Globe Fintech.</figcaption>
+</figure>

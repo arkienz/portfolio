@@ -9,18 +9,26 @@
 
 @theme {
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --color-page: #f7f8fb;
+  --color-page: #eef1f6;
   --color-ink: #0b1b3d;
   --color-muted: #51607d;
   --color-card: #ffffff;
-  --color-line: #dfe4ee;
+  --color-line: #d7dde8;
   --color-navy: #0b1f4a;
   --color-accent: #ffc447;
   --color-accent-ink: #1a1405;
   --color-link: #1d4ed8;
-  --color-pos: #e0873a;
-  --color-kaha: #0f9d7a;
-  --color-utang: #7c5cd6;
+  --color-pos: #b35a12;
+  --color-pos-ink: #ffffff;
+  --color-kaha: #0b8467;
+  --color-utang: #6a48c9;
+  /* Paper artifacts are physical things, so they stay light in both themes, with their own inks. */
+  --color-paper: #ffffff;
+  --color-paper-ink: #0b1b3d;
+  --color-paper-muted: #5a6680;
+  --color-paper-rule: #e3e7ef;
+  --color-paper-kaha: #0b8467;
+  --color-paper-utang: #6a48c9;
 }
 
 :root { --hdr: 3.6rem; } /* sticky header height; the 3D stage pins just below it */
@@ -34,21 +42,20 @@
   --color-line: #22304f;
   --color-link: #8fb2ff;
   --color-pos: #f2a565;
+  --color-pos-ink: #1a1405;
   --color-kaha: #4fd1ad;
   --color-utang: #a990f0;
+  --color-paper: #f3f5f9; /* a step down from white so the papers don't glare on the dark page */
 }
 
 html { scroll-behavior: smooth; background: var(--color-page); color: var(--color-ink); }
 body { font-family: var(--font-sans); }
+.num { font-variant-numeric: tabular-nums; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
-
-/* Scroll reveal: content stays visible without JS (class is added by script). */
-.js .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
-.js .reveal.in { opacity: 1; transform: none; }
 
 section[id] { scroll-margin-top: calc(var(--hdr) + 0.5rem); }
 
@@ -61,6 +68,37 @@ section[id] { scroll-margin-top: calc(var(--hdr) + 0.5rem); }
 .no-webgl .floor-steps, .no-webgl canvas, .no-webgl .headline[aria-hidden] { display: none; }
 .no-webgl #floor-stage { position: static; height: auto; padding-bottom: 3rem; }
 .no-webgl .headline { position: static !important; opacity: 1 !important; margin-top: 1.5rem; }
+
+/* Paper artifacts: payslip, receipt, ledger page, notebook page. */
+.paper {
+  background-color: var(--color-paper);
+  color: var(--color-paper-ink);
+  box-shadow: 0 1px 2px rgb(11 27 61 / 0.08), 0 18px 40px -18px rgb(11 27 61 / 0.35);
+}
+.tilt-l { transform: rotate(-1.2deg); }
+.tilt-r { transform: rotate(1deg); }
+.dash { border-top: 1.5px dashed var(--color-paper-rule); }
+/* Receipt: torn zigzag bottom edge. */
+.receipt { position: relative; margin-bottom: 12px; }
+.receipt::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -12px;
+  height: 12px;
+  background:
+    linear-gradient(135deg, var(--color-paper) 6px, transparent 0) 0 0 / 12px 12px repeat-x,
+    linear-gradient(-135deg, var(--color-paper) 6px, transparent 0) 0 0 / 12px 12px repeat-x;
+}
+/* Notebook: a red margin and ruled lines under each 2.25rem row (.75rem = the top padding). */
+.notebook {
+  background-image:
+    linear-gradient(90deg, transparent 2.9rem, #f2a3a3 2.9rem, #f2a3a3 calc(2.9rem + 1.5px), transparent calc(2.9rem + 1.5px)),
+    repeating-linear-gradient(to bottom, transparent 0, transparent calc(2.25rem - 1px), #c9d6ec calc(2.25rem - 1px), #c9d6ec 2.25rem);
+  background-position: 0 0, 0 0.75rem;
+}
+.notebook .row { height: 2.25rem; display: flex; align-items: flex-end; padding-bottom: 0.35rem; }
 
 /* Link color passes 3:1 on page and card in both themes; accent only on the navy card, where blue would not. */
 :focus-visible { outline: 3px solid var(--color-link); outline-offset: 3px; border-radius: 4px; }

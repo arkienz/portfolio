@@ -1,0 +1,28 @@
+---
+import { peso, sum } from './money';
+
+// Sample cutoff in centavos. The night overtime line is the point: 150 x 1.25 x 1.10 = 206.25.
+const nightOt = Math.round(15000 * 1.25 * 1.1);
+const added = Math.round(15000 * 1.35);
+const lines: [string, number][] = [['Basic pay', 1250000], ['Night differential', 105000], ['Overtime', 206250]];
+const deductions = 128600;
+const net = sum(lines.map(([, v]) => v)) + nightOt - deductions;
+---
+<figure class="paper tilt-r rounded-md p-6 sm:p-8" aria-label="Sample payslip">
+  <div class="flex items-start justify-between gap-4">
+    <div><p class="text-lg font-extrabold">Payslip</p><p class="text-sm text-paper-muted">Oct 1 to 15, 2026</p></div>
+    <div class="text-right text-sm"><p class="font-semibold">Acme Foods Inc.</p><p class="text-paper-muted">SMP-001, night shift</p></div>
+  </div>
+  <dl class="num mt-6 space-y-2.5 text-[0.95rem]">
+    {lines.map(([k, v]) => <div class="flex justify-between"><dt class="text-paper-muted">{k}</dt><dd>{peso(v)}</dd></div>)}
+    <div class="-mx-3 rounded-md bg-accent/25 px-3 py-2">
+      <div class="flex justify-between font-semibold"><dt>Night overtime, 1 hour</dt><dd>{peso(nightOt)}</dd></div>
+      <p class="mt-1 text-xs text-paper-muted">150 × 1.25 × 1.10. Adding the premiums instead gives {peso(added)}.</p>
+    </div>
+    <div class="flex justify-between"><dt class="text-paper-muted">Deductions</dt><dd>−{peso(deductions)}</dd></div>
+  </dl>
+  <div class="dash mt-5 flex items-baseline justify-between pt-4">
+    <span class="font-bold">Net pay</span><span class="num text-3xl font-extrabold">₱{peso(net)}</span>
+  </div>
+  <figcaption class="mt-4 text-xs text-paper-muted">Sample data. Not affiliated with SSS, PhilHealth, Pag-IBIG, BIR or DOLE.</figcaption>
+</figure>

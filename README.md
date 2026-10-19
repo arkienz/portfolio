@@ -18,15 +18,18 @@ Live: https://portfolio.arkienzkun.workers.dev
   - A 3D intro: a flat page of 12 app screens (payslip, GCash notice, shift calendar, sales chart,
     collection route and others) tilts back into a floor and breaks into lifted tiles as you scroll,
     with four headlines fading in step. Scrolling back reverses it.
-  - Cards for the four apps, then Easy Payroll and DevPOS sections with sideways screen galleries
-    (tap a screen to enlarge it), fact cards for Kaha and DevPAUTANG, "How I build", and a contact
-    card whose email button follows the app you pick.
+  - A one-sentence contents line, then a chapter per app, each printed on the paper it replaces:
+    Easy Payroll on a payslip, DevPOS on a cafe receipt, Kaha on a GCash ledger page and
+    DevPAUTANG on a lined notebook page. The papers show sample data, and their totals are
+    computed from their lines (`src/components/papers/money.ts`).
+  - Easy Payroll and DevPOS chapters end in an expanding panel gallery of six screens each
+    (hover, focus or tap a panel to open it).
+  - A short "who's behind it" line, and a contact card whose email button follows the app you pick.
 - Privacy notice (`/privacy/`) under the Data Privacy Act (RA 10173).
 - A custom 404 page served with a real 404 status.
 
 **Look and accessibility**
 - Light and dark mode (follows the system, with a toggle that remembers the choice in the browser).
-- Fade-in on scroll that turns off under reduced motion; content stays visible without JavaScript.
 - Reduced motion shows the 3D intro's finished layout with no scroll-driven move; without WebGL it
   falls back to a plain text hero.
 - Skip link, landmarks, alt text on every image, AA contrast in both themes, a 3:1 focus ring.
@@ -66,7 +69,8 @@ Live: https://portfolio.arkienzkun.workers.dev
 - `src/styles/global.css`: Tailwind import, color tokens for light and dark, the font, intro layout.
 - `src/assets/payroll/`, `src/assets/pos/`: marketing images copied from
   `D:\Repos\DevPAYROLL\docs\marketing\en` and `D:\Repos\DevPOS\docs\marketing\raket`.
-- `mockup/` (not in git): the approved clickable HTML mockup of the current design.
+- `src/components/`: `PanelGallery.astro` and `papers/` (payslip, receipt, ledger, notebook).
+- `mockup/` (not in git): the approved clickable mockups (`v2.html` is the current design).
 - `public/`: files served as-is: `_headers`, `robots.txt`, `favicon.svg`, `fonts/` (font + `OFL.txt`).
 - `wrangler.jsonc`: Cloudflare deploy config (serves `dist/`, uses `404.html` for unknown paths).
 - `.claude/agents/site-auditor.md`: a read-only agent that audits the built site before publishing.

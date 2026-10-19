@@ -1,0 +1,24 @@
+---
+import { sum } from './money';
+
+// A sample collection list, in whole pesos as a lender writes it. Paid rows are struck through.
+const rows = [
+  { name: 'Aling Nena', amount: 500, paid: true },
+  { name: 'Mang Ben', amount: 300, paid: true },
+  { name: 'Ate Joy', amount: 450, multa: 20, paid: false },
+  { name: 'Kuya Rey', amount: 1000, paid: false },
+];
+const left = sum(rows.filter((r) => !r.paid).map((r) => r.amount + (r.multa ?? 0)));
+const n = (v: number) => v.toLocaleString('en-PH');
+---
+<figure class="notebook paper tilt-r rounded-sm pb-4 pl-16 pr-5 pt-3" aria-label="Sample collection list">
+  <div class="row font-extrabold">Singilin ngayon, Oct 20</div>
+  {rows.map((r) => (
+    <div class="row num justify-between">
+      <span class:list={[r.paid && 'text-paper-muted line-through']}>{r.name}</span>
+      <span class:list={[r.paid && 'text-paper-muted line-through']}>{n(r.amount)}{r.multa && <span class="text-paper-utang"> + {r.multa} multa</span>}</span>
+    </div>
+  ))}
+  <div class="row num justify-between font-bold"><span>Left to collect</span><span class="text-paper-utang">₱{n(left)}</span></div>
+  <figcaption class="row text-xs text-paper-muted">Sample data.</figcaption>
+</figure>

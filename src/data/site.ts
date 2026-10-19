@@ -27,7 +27,6 @@ export const site = {
 
 // The four scroll steps of the 3D intro, in order. The first is the page's h1.
 export const intro = {
-  eyebrow: 'Software developer, Philippines',
   steps: [
     'Four apps that get Philippine payroll, sales, cash and credit right.',
     'Every screen comes from a real app.',
@@ -36,26 +35,17 @@ export const intro = {
   ],
 };
 
-// color is the token name in global.css (--color-<color>).
-export const apps = [
-  { name: 'Easy Payroll', href: '#payroll', mark: '₱', color: 'navy', markText: 'text-accent', text: 'Payroll for companies, premiums done the legal way.', status: 'Evaluation version available' },
-  { name: 'DevPOS', href: '#pos', mark: 'P', color: 'pos', markText: 'text-accent-ink', text: 'Cafe point of sale that knows the real profit on every cup.', status: 'Free demo available' },
-  { name: 'Kaha', href: '#more', mark: 'K', color: 'kaha', markText: 'text-white', text: 'GCash cash-in and cash-out ledger for sari-sari stores.', status: 'In development' },
-  { name: 'DevPAUTANG', href: '#more', mark: 'U', color: 'utang', markText: 'text-white', text: 'Loan record book and collection route for informal lenders.', status: 'Pre-release 0.8.0' },
-];
-
 export const showcases = [
   {
     id: 'payroll',
-    tag: 'Payroll · for companies',
     name: 'Easy Payroll',
     blurb:
-      'Multi-tenant payroll for Philippine companies: SSS, PhilHealth, Pag-IBIG and withholding tax, night differential, holiday and rest-day premiums, and shifts that cross midnight.',
+      'Payroll for Philippine companies that gets night shifts, holidays and overtime right: SSS, PhilHealth, Pag-IBIG and withholding tax, and shifts that cross midnight.',
     points: [
-      'Night overtime at 150 an hour is 206.25 when premiums multiply, not 202.50.',
-      'Net pay never goes below zero; loans are cut to what fits and flagged for HR.',
-      'Government rates arrive as signed rate packs you review before applying.',
-      'Employee self-service: server-stamped clock in, schedule, leave and payslips.',
+      'Premiums multiply, as the rules say. Night overtime at 150 an hour is 206.25, not the 202.50 you get by adding.',
+      'Net pay never goes below zero. Loans are cut to what fits and flagged for HR.',
+      'Government rates arrive as signed rate packs you review before they apply.',
+      'Staff clock in on their own sign-in, with the time stamped by the server.',
     ],
     cta: 'Ask for a payroll walkthrough',
     banner: payBanner,
@@ -67,19 +57,18 @@ export const showcases = [
       { src: payRates, title: 'Signed rate packs', sub: 'Review each government rate table before applying it.', alt: 'Versioned rate packs reviewed before applying' },
       { src: paySelf, title: 'Staff help themselves', sub: 'Server-stamped clock in, schedule, leave and payslips.', alt: 'Employee self-service sign-in, clock in and payslips' },
     ],
-    note: 'Sample data. Not affiliated with SSS, PhilHealth, Pag-IBIG, BIR or DOLE.',
+    note: 'Screens show sample data (Acme Foods Inc.).',
   },
   {
     id: 'pos',
-    tag: 'Point of sale · for cafes',
     name: 'DevPOS',
     blurb:
-      'The cafe POS that knows your real profit on every cup. Sell, track ingredients, run kitchen screens and close the day on an Android tablet or a Windows PC.',
+      'The cafe point of sale that knows the real profit on every cup. Sell, track ingredients, run kitchen screens and close the day on an Android tablet or a Windows PC.',
     points: [
       'Cash and GCash checkout keep selling when the internet is down.',
-      'Profit after VAT and ingredient costs, plus automatic ingredient stock.',
-      'Kitchen and bar screens, Senior/PWD discounts and Z-Reading.',
-      "QR Ph payments through the shop's own account (needs internet).",
+      'Profit after VAT and ingredient costs, with stock that deducts itself.',
+      'Kitchen and bar screens, Senior and PWD discounts, and the Z-Reading.',
+      "QR Ph through the shop's own account, when there is a connection.",
     ],
     cta: 'Ask for a POS demo',
     banner: posBanner,
@@ -91,34 +80,32 @@ export const showcases = [
       { src: posRules, title: 'Senior, PWD and Z-Reading', sub: 'Philippine discount and closing rules built in.', alt: 'Senior, PWD discounts and Z-Reading' },
       { src: posDash, title: 'Today at a glance', sub: 'Sales, profit, orders and low stock on one screen.', alt: 'Sales dashboard with profit, orders and low stock' },
     ],
-    note: 'Sample data (Demo Cafe).',
+    note: 'Screens show sample data (Demo Cafe).',
   },
 ];
 
-export const more = [
+export const store = [
   {
+    id: 'kaha',
     name: 'Kaha',
-    color: 'kaha',
-    tag: 'Store ledger · Android and Windows',
-    text: "For sari-sari stores doing GCash cash-in and cash-out. Record each transaction and see today's fees earned, GCash balance and cash on hand.",
-    facts: [['Internet', 'Not needed'], ['Data', 'Encrypted on the device'], ['Price', 'Free, 30-day Pro trial'], ['Status', 'In development']],
-    note: 'Not affiliated with GCash, G-Xchange, Inc. or Globe Fintech.',
+    text: "A ledger for sari-sari stores that do GCash cash-in and cash-out. Each transaction goes in with the customer's number and the fee, and the day's fees, GCash balance and cash on hand add up by themselves. No internet, encrypted on the phone or PC.",
+    status: 'Free with a 30-day Pro trial. In development.',
   },
   {
+    id: 'utang',
     name: 'DevPAUTANG',
-    color: 'utang',
-    tag: 'Loan record book · Android and Windows',
-    text: "For neighbors, relatives and store owners who lend (5-6, hulugan, flat interest): who owes what and when, late penalties, and the day's collection route.",
-    facts: [['Internet', 'Not needed'], ['Reminders', 'Due dates and routes'], ['Penalties', 'Multa added for you'], ['Status', 'Pre-release 0.8.0']],
-    note: 'Screenshots coming soon.',
+    text: "The listahan, without the lost notebook. For anyone who lends (5-6, hulugan, flat interest): who owes what and when, late penalties added for you, and the day's collection route with reminders. Works offline on Android and Windows.",
+    status: 'Pre-release 0.8.0. Screenshots coming soon.',
   },
 ];
+
+export const about =
+  "I'm Mark Angelo Pasion, a software developer in the Philippines. I build each app end to end in C# and .NET, from the database to Android and Windows, and I test the money math on its edges.";
 
 export const principles = [
   { t: 'Offline first', d: 'Three of the four apps need no internet, so the shop keeps working when the connection drops.' },
-  { t: 'Money is exact', d: 'Premiums, rounding and compounding are tested on the boundaries, not eyeballed.' },
-  { t: 'Private by design', d: 'Per-company data separation on the server and encrypted databases on the device.' },
-  { t: 'One codebase', d: 'C# and .NET from the database to Android and Windows, so one fix reaches every platform.' },
+  { t: 'Money is exact', d: 'Premiums, rounding and compounding are tested on the boundaries.' },
+  { t: 'Private by design', d: 'Company data is kept apart on the server; device data is encrypted.' },
 ];
 
 // The contact card's app picker; the email subject follows the choice.

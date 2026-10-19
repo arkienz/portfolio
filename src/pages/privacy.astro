@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+const updated = 'October 19, 2026';
+---
+<Base title={`Privacy notice | ${site.name}`} description="How this portfolio site handles personal data under the Data Privacy Act of 2012 (RA 10173).">
+  <main id="main" class="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-20">
+    <a href="/" class="text-sm text-link hover:underline">Back to home</a>
+    <h1 class="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl">Privacy notice</h1>
+    <p class="mt-2 text-sm text-muted">Last updated {updated}</p>
+    <!-- Draft: have a Philippine lawyer review before relying on it. -->
+
+    <div class="mt-10 space-y-8 leading-relaxed text-muted [&_h2]:text-lg [&_h2]:font-bold [&_h2]:text-ink">
+      <section>
+        <h2>Who runs this site</h2>
+        <p class="mt-2">This site is run by {site.name}, a software developer in the Philippines. Contact: <a class="text-link hover:underline" href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      </section>
+
+      <section>
+        <h2>What this site collects</h2>
+        <p class="mt-2">Nothing directly. There are no forms, no accounts, no analytics, no advertising and no tracking cookies. If you choose light or dark mode, that choice is saved in your own browser (local storage) and never sent to me.</p>
+      </section>
+
+      <section>
+        <h2>Hosting</h2>
+        <p class="mt-2">The site is hosted on Cloudflare. To deliver the pages and protect them from abuse, Cloudflare processes technical request data such as your IP address, browser type and the pages requested. Cloudflare handles that data under its own <a class="text-link hover:underline" href="https://www.cloudflare.com/privacypolicy/" rel="noopener">privacy policy</a>. I do not receive or keep these logs.</p>
+      </section>
+
+      <section>
+        <h2>If you contact me</h2>
+        <p class="mt-2">When you email or call me, I receive what you send: your name, email address or phone number, and your message. I use it only to reply and to discuss the work you asked about. I do not sell it or share it with anyone else, and I delete it when it is no longer needed for that conversation or for any work we agree on.</p>
+      </section>
+
+      <section>
+        <h2>Your rights</h2>
+        <p class="mt-2">Under the Data Privacy Act of 2012 (Republic Act No. 10173) you can ask what personal data I hold about you, ask me to correct or delete it, and object to its use. Email me at the address above and I will respond within 15 days. You may also file a complaint with the National Privacy Commission (privacy.gov.ph).</p>
+      </section>
+
+      <section>
+        <h2>Changes</h2>
+        <p class="mt-2">If this notice changes, the date at the top will change with it.</p>
+      </section>
+    </div>
+  </main>
+</Base>

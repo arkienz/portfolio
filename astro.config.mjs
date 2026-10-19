@@ -3,8 +3,10 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  // Replace with the real domain before deploy (sitemap and canonical URLs use it).
+  // Sitemap and canonical URLs use this; change it if a custom domain is added.
   site: 'https://portfolio.arkienzkun.workers.dev',
   integrations: [sitemap()],
+  // Emits a CSP meta tag with hashes for every inline script and style Astro outputs.
+  security: { csp: true },
   vite: { plugins: [tailwindcss()] },
 });

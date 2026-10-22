@@ -14,6 +14,12 @@ import posStock from '../assets/pos/04-inventory.png';
 import posKitchen from '../assets/pos/05-kitchen-screens.png';
 import posRules from '../assets/pos/06-ph-rules.png';
 import posDash from '../assets/pos/07-dashboard.png';
+import huntScored from '../assets/jobhunter/01-scored.png';
+import huntTests from '../assets/jobhunter/02-hidden-tests.png';
+import huntRun from '../assets/jobhunter/03-run-progress.png';
+import huntPhone from '../assets/jobhunter/04-telegram.png';
+import huntProfile from '../assets/jobhunter/06-profile-update.png';
+import huntBuilt from '../assets/jobhunter/07-how-its-built.png';
 
 export const site = {
   name: 'Mark Angelo Pasion',
@@ -98,6 +104,30 @@ export const store = [
     status: 'Pre-release 0.8.0. Screenshots coming soon.',
   },
 ];
+
+// A tool I built for my own job hunt, not one of the products for sale: no walkthrough pass.
+export const tool = {
+  id: 'jobhunter',
+  name: 'Job Hunter',
+  blurb:
+    "My own job hunt, run by Claude. A Windows app and a local n8n workflow search onlinejobs.ph, score every new post 0 to 10 against my profile, and draft a cover letter that follows the post's instructions.",
+  points: [
+    'Every new post read within the hour, scored with a one-line reason.',
+    'Hidden tests in a post ("start with...", "mention the word...") listed and followed in the letter.',
+    'Good matches go to my phone on Telegram, with the letter ready to copy.',
+    'Claude runs with every tool turned off: job posts are untrusted text.',
+  ],
+  link: 'https://github.com/arkienz/DevJOBHUNTER-Showcase',
+  shots: [
+    { src: huntScored, title: 'Scored 0 to 10', sub: 'Every new post against my profile, pay converted to USD an hour.', alt: 'Jobs list with scores, pay and results' },
+    { src: huntTests, title: 'Hidden tests caught', sub: 'The letter follows every instruction in the post.', alt: 'Post instructions and a draft letter that follows them' },
+    { src: huntRun, title: 'Watch the run', sub: 'The search, then each post as Claude reads it.', alt: 'Run progress bar showing post 4 of 6 being read' },
+    { src: huntPhone, title: 'Matches on my phone', sub: 'Score, pay, instructions and a letter to copy.', alt: 'Telegram message with score, pay and the draft letter' },
+    { src: huntProfile, title: 'Profile keeps up', sub: 'Claude reads my project READMEs and suggests what is missing.', alt: 'Profile update listing projects not yet in the profile' },
+    { src: huntBuilt, title: 'How it is built', sub: '.NET app, local n8n, Claude Code with no tools, Telegram.', alt: 'Architecture: app, n8n, Claude Code, Telegram' },
+  ],
+  note: 'Screens show sample data. Not affiliated with or endorsed by onlinejobs.ph, Telegram or Anthropic.',
+};
 
 export const about =
   "I'm Mark Angelo Pasion, a software developer in the Philippines. I build each app end to end in C# and .NET, from the database to Android and Windows, and I test the money math on its edges.";

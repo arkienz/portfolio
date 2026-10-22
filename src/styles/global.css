@@ -22,6 +22,8 @@
   --color-pos-ink: #ffffff;
   --color-kaha: #0b8467;
   --color-utang: #6a48c9;
+  --color-hunt: #0e7a6f;
+  --color-hunt-ink: #ffffff;
   /* Paper artifacts are physical things, so they stay light in both themes, with their own inks. */
   --color-paper: #ffffff;
   --color-paper-ink: #0b1b3d;
@@ -45,6 +47,8 @@
   --color-pos-ink: #1a1405;
   --color-kaha: #4fd1ad;
   --color-utang: #a990f0;
+  --color-hunt: #4fc9bb;
+  --color-hunt-ink: #062824;
   --color-paper: #f3f5f9; /* a step down from white so the papers don't glare on the dark page */
 }
 

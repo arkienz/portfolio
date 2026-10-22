@@ -7,9 +7,9 @@ import Receipt from '../components/papers/Receipt.astro';
 import Ledger from '../components/papers/Ledger.astro';
 import Notebook from '../components/papers/Notebook.astro';
 import ContactWallet from '../components/ContactWallet.astro';
-import { site, intro, showcases, store, about, principles, walkthroughMail } from '../data/site';
+import { site, intro, showcases, store, tool, about, principles, walkthroughMail } from '../data/site';
 
-const nav = [['Easy Payroll', '#payroll'], ['DevPOS', '#pos'], ['Kaha', '#store'], ['DevPAUTANG', '#store']];
+const nav = [['Easy Payroll', '#payroll'], ['DevPOS', '#pos'], ['Kaha', '#store'], ['DevPAUTANG', '#store'], ['Job Hunter', '#jobhunter']];
 // Each chapter is printed on the paper its app replaces. Tailwind only sees literal class names,
 // so each chapter's ink and paper are mapped here.
 const chapter = {
@@ -116,6 +116,23 @@ const [payTile, posTile] = await Promise.all(showcases.map((s) => tileImg(s.bann
       </div>
     </section>
 
+    <!-- Job Hunter: a tool for my own job hunt, with its screens and a link to the showcase repo -->
+    <section id={tool.id} class="border-t border-line py-16 sm:py-24">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <p class="text-sm font-semibold uppercase tracking-wider text-muted">Built for my own job hunt</p>
+        <h2 class="mt-2 text-4xl font-extrabold tracking-tight sm:text-6xl">{tool.name}</h2>
+        <p class="mt-4 max-w-2xl text-lg text-muted">{tool.blurb}</p>
+        <ul class="mt-8 grid max-w-4xl gap-3 sm:grid-cols-2">
+          {tool.points.map((p) => <li class="border-l-4 border-hunt pl-4">{p}</li>)}
+        </ul>
+        <a href={tool.link} rel="noopener" class="mt-8 inline-block whitespace-nowrap rounded-xl bg-hunt px-5 py-2.5 font-bold text-hunt-ink hover:brightness-95">See how it's built on GitHub</a>
+        <div class="mt-14">
+          <PanelGallery label={`${tool.name} screens`} shots={tool.shots} />
+          <p class="mt-3 text-xs text-muted">{tool.note}</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Who is behind it -->
     <section id="about" class="border-t border-line py-16 sm:py-24">
       <div class="mx-auto max-w-6xl px-4 sm:px-6">
@@ -144,7 +161,7 @@ const [payTile, posTile] = await Promise.all(showcases.map((s) => tileImg(s.bann
   </main>
 
   <footer class="border-t border-line py-8 text-center text-xs text-muted">
-    <p>&copy; {new Date().getFullYear()} {site.name}. Easy Payroll, DevPOS, Kaha and DevPAUTANG are my own products, not affiliated with or endorsed by GCash, G-Xchange, Inc., QR Ph, the Bangko Sentral ng Pilipinas, SSS, PhilHealth, Pag-IBIG, BIR or DOLE. Their names are used only to describe what the apps work with.</p>
+    <p>&copy; {new Date().getFullYear()} {site.name}. Easy Payroll, DevPOS, Kaha, DevPAUTANG and Job Hunter are my own products, not affiliated with or endorsed by GCash, G-Xchange, Inc., QR Ph, the Bangko Sentral ng Pilipinas, SSS, PhilHealth, Pag-IBIG, BIR, DOLE, onlinejobs.ph, Telegram or Anthropic. Their names are used only to describe what the apps work with.</p>
     <p class="mt-2">
       <a href="/privacy/" class="underline-offset-4 hover:text-ink hover:underline">Privacy notice</a>.
       <a href="/licenses.txt" class="underline-offset-4 hover:text-ink hover:underline">Open-source licenses</a>.
